@@ -1,5 +1,7 @@
 package com.loja.auth.api_auth.security;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,24 +26,39 @@ public class DataInitialize implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Criando e salvando a empresa
-        Company company = new Company();
-        company.setName("Minha Empresa");
-        company.setAddress("Rua Exemplo, 123, Cidade Exemplo"); // Definindo um endereço válido
+        // Verifica se a empresa já existe
+        Optional<Company> optionalCompany = companyRepository.findByName("Minha Empresa");
 
-        // Salvando a empresa no banco de dados
-        company = companyRepository.save(company);
+        Company company;
+        if (optionalCompany.isEmpty()) {
+            // Criando e salvando a empresa
+            company = new Company();
+            company.setName("Minha Empresa");
+            company.setAddress("Rua Exemplo, 123, Cidade Exemplo"); // Definindo um endereço válido
 
-        // Agora que a empresa foi salva, podemos criar e associar o usuário a essa empresa
-        Auth user = new Auth();
-        user.setLogin("master");
-        user.setPassword(passwordEncoder.encode("master"));
-        user.setRole("ADMIN");
-        user.setCompany(company); // Associando a empresa ao usuário
+            // Salvando a empresa no banco de dados
+            company = companyRepository.save(company);
+            System.out.println("Empresa criada: " + company.getName());
+        } else {
+            company = optionalCompany.get();
+            System.out.println("Empresa já existe: " + company.getName());
+        }
 
-        // Salvando o usuário no banco de dados
-        userRepository.save(user);
+        // Verifica se o usuário já existe
+        Auth user = userRepository.findByLogin("master");
 
-        System.out.println("Usuário criado com empresa associada");
+        if (user == null) {
+            user = new Auth();
+            user.setLogin("master");
+            user.setPassword(passwordEncoder.encode("master"));
+            user.setRole("ADMIN");
+            user.setCompany(company); // Associando a empresa ao usuário
+
+            // Salvando o usuário no banco de dados
+            userRepository.save(user);
+            System.out.println("Usuário criado com empresa associada: " + user.getLogin());
+        } else {
+            System.out.println("Usuário já existe: " + user.getLogin());
+        }
     }
 }
