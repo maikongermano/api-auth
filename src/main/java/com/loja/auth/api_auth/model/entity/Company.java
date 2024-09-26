@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "auth")
+@Table(name = "company")
 @Data
 public class Company implements Serializable {
 	
