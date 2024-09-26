@@ -49,7 +49,7 @@ public class SecurityConfigurer {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorizeRequests -> 
                 authorizeRequests
-                    .requestMatchers("auth", "/h2-console/**").permitAll()
+                    .requestMatchers("auth", "/h2-console/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                     .anyRequest().authenticated()
             )
             .addFilterBefore(filterToken, UsernamePasswordAuthenticationFilter.class);
