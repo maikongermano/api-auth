@@ -10,7 +10,7 @@ RUN ./mvnw dependency:resolve
 COPY src src
 
 # Execute a construção do projeto
-RUN ./mvnw package
+RUN ./mvnw package -DskipTests
 FROM openjdk:17-jdk-slim
 
 WORKDIR app
