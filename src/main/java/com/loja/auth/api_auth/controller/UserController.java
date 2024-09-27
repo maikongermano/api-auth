@@ -23,7 +23,7 @@ import com.loja.auth.api_auth.service.CompanyService;
 import com.loja.auth.api_auth.service.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired

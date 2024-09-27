@@ -14,7 +14,7 @@ import com.loja.auth.api_auth.model.entity.Company;
 import com.loja.auth.api_auth.service.CompanyService;
 
 @RestController
-@RequestMapping("/companies")
+@RequestMapping("/api/companies")
 public class CompanyController {
 
     @Autowired
