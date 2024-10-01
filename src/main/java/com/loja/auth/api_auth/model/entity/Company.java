@@ -1,6 +1,7 @@
 package com.loja.auth.api_auth.model.entity;
 
 import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,25 +26,25 @@ public class Company implements Serializable {
 
     @Column
     private String address;
-    
-    @Column
+
+    @Column(columnDefinition = "TEXT")
     private String clientDescription;
-    
-    @Column
+
+    @Column(columnDefinition = "TEXT")
     private String titleHmtl;
-    
-    @Column
+
+    @Column(columnDefinition = "TEXT")
     private String clientDomain;
-    
-    @Column
+
+    @Column(columnDefinition = "TEXT")
     private String clientLogo;
-    
-    @Column
+
+    @Column(columnDefinition = "TEXT")
     private String clientName;
-    
+
     @Column
     private Boolean useBackgroundDefaultPage;
-    
-    @Column
+
+    @Column(columnDefinition = "TEXT")
     private String clientBackground;
 }
