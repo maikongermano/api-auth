@@ -99,8 +99,13 @@ public class AuthController {
 	}
     
     @GetMapping("/validar-token")
-    public ResponseEntity<?> validateToken(@RequestParam String token) {
+    public ResponseEntity<?> validateToken() {
         // Verifica se o token é válido
+    	String token = request.getHeader("Authorization");
+    	if (token == null || !token.startsWith("Bearer ")) {
+            throw new CustomAuthenticationException("Token inválido: Nenhum token fornecido.");
+        }
+    	token = token.substring(7); // Remove o prefixo "Bearer " para obter o token real
         if (tokenService.isTokenValid(token)) {
             // Obtém o usuário associado ao token
             Auth user = tokenService.getUserFromToken(token);
