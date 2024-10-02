@@ -3,6 +3,8 @@ package com.loja.auth.api_auth.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loja.auth.api_auth.exception.CustomAuthenticationException;
 import com.loja.auth.api_auth.model.dto.AuthDTO;
 import com.loja.auth.api_auth.model.dto.TokenDTO;
+import com.loja.auth.api_auth.model.dto.UserDTO;
 import com.loja.auth.api_auth.model.entity.Auth;
 import com.loja.auth.api_auth.service.TokenService;
 
@@ -93,4 +97,30 @@ public class AuthController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		return objectMapper.writeValueAsString(token);
 	}
+    
+    @GetMapping("/validar-token")
+    public ResponseEntity<?> validateToken(@RequestParam String token) {
+        // Verifica se o token é válido
+        if (tokenService.isTokenValid(token)) {
+            // Obtém o usuário associado ao token
+            Auth user = tokenService.getUserFromToken(token);
+            if (user != null) {
+                // Retorna as informações do usuário
+            	UserDTO userDTO = new UserDTO();
+                userDTO.setId(user.getId());
+                userDTO.setLogin(user.getUsername());
+                userDTO.setRole(user.getRole());
+                userDTO.setEmpresa(user.getCompany().getName());
+                userDTO.setCompanyId(user.getCompany().getId());
+                
+                return ResponseEntity.ok(userDTO);
+            } else {
+                return ResponseEntity.status(HttpStatusCode.valueOf(401))
+                        .body("Usuário não encontrado para o token fornecido.");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatusCode.valueOf(403))
+                    .body("Token inválido.");
+        }
+    }
 }

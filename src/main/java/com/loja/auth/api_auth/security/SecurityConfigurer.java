@@ -49,7 +49,7 @@ public class SecurityConfigurer {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorizeRequests -> 
                 authorizeRequests
-                	.requestMatchers("auth","/v3/api-docs", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**").permitAll()
+                	.requestMatchers("auth", "validar-token/**", "/v3/api-docs", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**").permitAll()
                     .anyRequest().authenticated()
             )
             .addFilterBefore(filterToken, UsernamePasswordAuthenticationFilter.class);

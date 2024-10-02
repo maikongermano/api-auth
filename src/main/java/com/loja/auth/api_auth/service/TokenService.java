@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -14,12 +15,16 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.loja.auth.api_auth.exception.AuthenticationFailureException;
 import com.loja.auth.api_auth.model.entity.Auth;
+import com.loja.auth.api_auth.repository.AuthRepository;
 
 @Service
 public class TokenService {
 
     private static final String SECRET = "secreta";
     private static final String ISSUER = "auth";
+    
+    @Autowired
+    private AuthRepository userRepository;
 
     public String gerarToken(Auth user) {
         return JWT.create()
@@ -56,5 +61,29 @@ public class TokenService {
             // Captura outras exceções inesperadas
             throw new AuthenticationFailureException("Erro inesperado ao autenticar o token: " + e.getMessage());
         }
+    }
+    
+ // Método para validar o token
+    public boolean isTokenValid(String token) {
+        try {
+            // Verifica se o token é assinado com a chave secreta
+            JWT.require(Algorithm.HMAC256(SECRET))
+                    .withIssuer(ISSUER)
+                    .build()
+                    .verify(token);
+            return true; // Token válido
+        } catch (TokenExpiredException e) {
+            return false; // Token expirado
+        } catch (JWTVerificationException e) {
+            return false; // Token inválido
+        } catch (Exception e) {
+            return false; // Erro inesperado
+        }
+    }
+
+    // Método para obter o usuário a partir do token
+    public Auth getUserFromToken(String token) {
+        String username = getSubject(token); // Obtém o nome de usuário do token
+        return userRepository.findByLogin(username); // Busca o usuário no banco de dados
     }
 }
