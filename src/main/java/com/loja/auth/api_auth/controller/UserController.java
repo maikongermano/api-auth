@@ -59,7 +59,6 @@ public class UserController {
             throw new RuntimeException("Apenas administradores podem criar novos usuários.");
         }
 
-        // Buscar a empresa pelo ID ou nome (ajuste conforme necessário)
         Company company = companyService.findById(userDTO.getCompanyId())
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada com o ID: " + userDTO.getCompanyId()));
 
@@ -89,7 +88,6 @@ public class UserController {
             user.setRole(userDTO.getRole());
         }
 
-        // Buscar a empresa pelo ID ou nome (ajuste conforme necessário)
         Company company = companyService.findById(userDTO.getCompanyId())
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada com o ID: " + userDTO.getCompanyId()));
 
