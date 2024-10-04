@@ -18,8 +18,16 @@ public class ProductMapper {
         dto.setId(product.getId());
         dto.setName(product.getName());
         dto.setDescription(product.getDescription());
+        dto.setSubDescription(product.getSubDescription());
         dto.setPrice(product.getPrice());
         dto.setCompanyId(product.getCompanyId());
+        dto.setAvaliable(product.getAvaliable());
+        dto.setIsAvaliable(product.getIsAvaliable());
+        dto.setMinQuantity(product.getMinQuantity());
+        dto.setIsLastUnits(product.getIsLastUnits());
+        dto.setIsDiscount(product.getIsDiscount());
+        dto.setDiscount(product.getDiscount());
+        dto.setCategory(product.getCategory());
         
         List<ImageDTO> imageDTOs = product.getImages().stream()
             .map(this::toImageDTO)
@@ -34,8 +42,16 @@ public class ProductMapper {
         product.setId(productDTO.getId());
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
+        product.setSubDescription(productDTO.getSubDescription());
         product.setPrice(productDTO.getPrice());
         product.setCompanyId(productDTO.getCompanyId());
+        product.setAvaliable(productDTO.getAvaliable());
+        product.setIsAvaliable(productDTO.getIsAvaliable());
+        product.setMinQuantity(productDTO.getMinQuantity());
+        product.setIsLastUnits(productDTO.getIsLastUnits());
+        product.setIsDiscount(productDTO.getIsDiscount());
+        product.setDiscount(productDTO.getDiscount());
+        product.setCategory(productDTO.getCategory());
 
         List<Image> images = productDTO.getImages().stream()
             .map(this::toImageEntity)

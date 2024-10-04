@@ -10,6 +10,7 @@ public class ProductDTO {
 	private Long id;
     private String name;
     private String description;
+    private String subDescription;
     private Double price;
     private Long companyId;
     private List<ImageDTO> images;
