@@ -5,6 +5,6 @@ import com.loja.auth.api_auth.model.enums.OrderStatus;
 
 public interface OrderService {
     OrderDTO createOrder(OrderDTO orderDTO);
-    OrderDTO getOrderById(String orderId);
-    void updateOrderStatus(String orderId, OrderStatus newStatus);
+    OrderDTO getOrderById(Long orderId);
+    void updateOrderStatus(Long orderId, OrderStatus newStatus);
 }

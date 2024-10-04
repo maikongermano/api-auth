@@ -10,5 +10,5 @@ import com.loja.auth.api_auth.model.entity.Order;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 	
-	Optional<Order> findById(String orderId);
+	Optional<Order> findById(Long id);
 }

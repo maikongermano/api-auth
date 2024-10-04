@@ -29,13 +29,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO getOrderById(String orderId) {
+    public OrderDTO getOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Ordem não encontrada"));
         return orderMapper.toDTO(order);
     }
     
     @Override
-    public void updateOrderStatus(String orderId, OrderStatus newStatus) {
+    public void updateOrderStatus(Long orderId, OrderStatus newStatus) {
         Optional<Order> orderOptional = orderRepository.findById(orderId);
         if (orderOptional.isPresent()) {
         	Order order = orderOptional.get();
