@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 public class Product {
     
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -26,6 +26,9 @@ public class Product {
 
     @Column(nullable = false)
     private String description;
+    
+    @Column(nullable = false)
+    private String subDescription;
 
     @Column(nullable = false)
     private Double price;
@@ -35,5 +38,26 @@ public class Product {
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
+    
+    @Column(nullable = false)
+    private String avaliable; /* mostrar na loja */
+    
+    @Column(nullable = false)
+    private Boolean isAvaliable = false; /* mostrar icone de avaliação */
+    
+    @Column(nullable = false)
+    private Double minQuantity; /* min quantidade */
+
+    @Column(nullable = false)
+    private Boolean isLastUnits = false; /* mostrar icon de ultimas unidades */
+    
+    @Column(nullable = false)
+    private Boolean isDiscount = false; /* mostrar icon de desconto */
+    
+    @Column(nullable = false)
+    private Double discount; /* desconto */
+    
+    @Column(nullable = false)
+    private Boolean category = false; /* Default value */
 
 }

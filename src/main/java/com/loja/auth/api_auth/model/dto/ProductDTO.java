@@ -13,5 +13,12 @@ public class ProductDTO {
     private Double price;
     private Long companyId;
     private List<ImageDTO> images;
+    private String avaliable;
+    private Boolean isAvaliable;
+    private Double minQuantity;
+    private Boolean isLastUnits;
+    private Boolean isDiscount;
+    private Double discount;
+    private Boolean category;
 
 }
