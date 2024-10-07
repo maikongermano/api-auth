@@ -1,5 +1,6 @@
 package com.loja.auth.api_auth.security;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.loja.auth.api_auth.model.entity.Auth;
+import com.loja.auth.api_auth.model.entity.AuthCompany;
 import com.loja.auth.api_auth.model.entity.Company;
 import com.loja.auth.api_auth.model.enums.Role;
 import com.loja.auth.api_auth.repository.AuthRepository;
@@ -60,9 +62,14 @@ public class DataInitialize implements CommandLineRunner {
             user.setLogin("master");
             user.setPassword(passwordEncoder.encode("master"));
             user.setRole(Role.ADMIN);
-            user.setCompany(company); // Associando a empresa ao usuário
+            ArrayList<AuthCompany> lista = new ArrayList<>();
+            AuthCompany authCompany = new AuthCompany();
+            authCompany.setAuth(user);
+            authCompany.setCompany(company);
+            lista.add(authCompany);
 
             // Salvando o usuário no banco de dados
+            user.setAuthCompanies(lista);
             userRepository.save(user);
             System.out.println("Usuário criado com empresa associada: " + user.getLogin());
         } else {

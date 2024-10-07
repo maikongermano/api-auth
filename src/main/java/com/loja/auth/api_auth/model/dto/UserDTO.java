@@ -1,5 +1,7 @@
 package com.loja.auth.api_auth.model.dto;
 
+import java.util.List;
+
 import com.loja.auth.api_auth.model.enums.Role;
 
 import lombok.Data;
@@ -10,7 +12,7 @@ public class UserDTO {
 	private Long id;
     private String login;
     private Role role;
-    private String empresa;
+    private List<String> empresas;
 	private Long companyId;
 	private String password;
 

@@ -32,7 +32,6 @@ public class TokenService {
                 .withSubject(user.getUsername())
                 .withClaim("id", user.getId())
                 .withClaim("role", user.getRole().name())
-                .withClaim("empresa", user.getCompany().getId())
                 .withExpiresAt(LocalDateTime.now()
                         .plusMinutes(10)
                         .toInstant(ZoneOffset.of("-03:00"))

@@ -20,7 +20,7 @@ import com.loja.auth.api_auth.exception.UserNotFoundException;
 import com.loja.auth.api_auth.mappers.UserMapper;
 import com.loja.auth.api_auth.model.dto.UserDTO;
 import com.loja.auth.api_auth.model.entity.Auth;
-import com.loja.auth.api_auth.model.entity.Company;
+import com.loja.auth.api_auth.model.entity.AuthCompany;
 import com.loja.auth.api_auth.model.enums.Role;
 import com.loja.auth.api_auth.service.CompanyService;
 import com.loja.auth.api_auth.service.UserService;
@@ -61,12 +61,8 @@ public class UserController {
         if (currentUser.getRole() != Role.ADMIN) {
             throw new RuntimeException("Apenas administradores podem criar novos usuários.");
         }
-
-        Company company = companyService.findById(userDTO.getCompanyId())
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada com o ID: " + userDTO.getCompanyId()));
-
-        Auth user = userMapper.toEntity(userDTO);
-        user.setCompany(company);
+        
+        Auth user = userMapper.toEntity(userDTO);;
 
         return userService.save(user);
     }
@@ -91,11 +87,6 @@ public class UserController {
 	        user.setRole(userDTO.getRole());
 	    }
 
-	    Company company = companyService.findById(userDTO.getCompanyId())
-	            .orElseThrow(() -> new RuntimeException("Empresa não encontrada com o ID: " + userDTO.getCompanyId()));
-
-	    user.setCompany(company);
-
 	    return userService.save(user);
     }
     
@@ -109,8 +100,8 @@ public class UserController {
     }
     
     @GetMapping("/{userId}/companies")
-    public ResponseEntity<List<Company>> getCompaniesByUserId(@PathVariable Long userId) {
-        List<Company> companies = userService.getCompaniesByUserId(userId);
+    public ResponseEntity<List<AuthCompany>> getCompaniesByUserId(@PathVariable Long userId) {
+        List<AuthCompany> companies = userService.getCompaniesByUserId(userId);
         return ResponseEntity.ok(companies);
     }
 

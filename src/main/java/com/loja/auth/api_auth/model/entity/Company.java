@@ -1,12 +1,15 @@
 package com.loja.auth.api_auth.model.entity;
 
 import java.io.Serializable;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -47,4 +50,7 @@ public class Company implements Serializable {
 
     @Column(columnDefinition = "TEXT")
     private String clientBackground;
+    
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<AuthCompany> authCompanies;
 }

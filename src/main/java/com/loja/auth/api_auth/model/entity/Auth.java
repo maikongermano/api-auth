@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.loja.auth.api_auth.model.enums.Role;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,8 +18,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -41,9 +41,8 @@ public class Auth implements UserDetails, Serializable {
 	@Column
 	private Role role;
 	
-	@ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+	@OneToMany(mappedBy = "auth", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AuthCompany> authCompanies;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -108,12 +107,12 @@ public class Auth implements UserDetails, Serializable {
 		this.password = password;
 	}
 	
-	public Company getCompany() {
-        return company;
+	public List<AuthCompany> getAuthCompanies() {
+        return authCompanies;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setAuthCompanies(List<AuthCompany> authCompany) {
+        this.authCompanies = authCompany;
     }
 
 }

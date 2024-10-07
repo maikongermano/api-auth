@@ -1,10 +1,14 @@
 package com.loja.auth.api_auth.mappers;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.loja.auth.api_auth.model.dto.UserDTO;
 import com.loja.auth.api_auth.model.entity.Auth;
+import com.loja.auth.api_auth.model.entity.AuthCompany;
 import com.loja.auth.api_auth.model.entity.Company;
 import com.loja.auth.api_auth.service.CompanyService;
 
@@ -19,8 +23,10 @@ public class UserMapper {
         dto.setId(auth.getId());
         dto.setLogin(auth.getLogin());
         dto.setRole(auth.getRole());
-        dto.setEmpresa(auth.getCompany().getName());
-        dto.setCompanyId(auth.getCompany().getId());
+        List<String> empresas = auth.getAuthCompanies().stream()
+                .map(authCompany -> authCompany.getCompany().getName())
+                .collect(Collectors.toList());
+            dto.setEmpresas(empresas);
         dto.setPassword("");
         return dto;
     }
@@ -31,14 +37,22 @@ public class UserMapper {
         auth.setLogin(userDTO.getLogin());
         auth.setRole(userDTO.getRole());
 
-        // Buscar a empresa pelo nome no DTO e associá-la à entidade Auth
-        Company company = companyService.findByName(userDTO.getEmpresa());
+        // Mapeia as empresas do DTO para a entidade Auth
+        List<Company> companies = userDTO.getEmpresas().stream()
+            .map(companyService::findByName)
+            .collect(Collectors.toList());
 
-        if (company == null) {
-            throw new RuntimeException("Empresa não encontrada com o nome: " + userDTO.getEmpresa());
-        }
-
-        auth.setCompany(company);
+        // Associa as empresas ao Auth
+        List<AuthCompany> authCompanies = userDTO.getEmpresas().stream()
+                .map(companyName -> {
+                    Company company = companyService.findByName(companyName);
+                    AuthCompany authCompany = new AuthCompany();
+                    authCompany.setAuth(auth);
+                    authCompany.setCompany(company);
+                    return authCompany;
+                }).collect(Collectors.toList());
+        
+        auth.setAuthCompanies(authCompanies);
 
         return auth;
     }

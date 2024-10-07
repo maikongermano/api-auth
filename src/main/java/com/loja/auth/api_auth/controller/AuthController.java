@@ -1,5 +1,8 @@
 package com.loja.auth.api_auth.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,8 +117,10 @@ public class AuthController {
                 userDTO.setId(user.getId());
                 userDTO.setLogin(user.getUsername());
                 userDTO.setRole(user.getRole());
-                userDTO.setEmpresa(user.getCompany().getName());
-                userDTO.setCompanyId(user.getCompany().getId());
+                List<String> empresas = user.getAuthCompanies().stream()
+                        .map(authCompany ->  authCompany.getCompany().getId() + " - "+authCompany.getCompany().getName())
+                        .collect(Collectors.toList());
+                userDTO.setEmpresas(empresas);;
                 
                 return ResponseEntity.ok(userDTO);
             } else {

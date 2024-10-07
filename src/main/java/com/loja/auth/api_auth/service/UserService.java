@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.loja.auth.api_auth.model.entity.Auth;
-import com.loja.auth.api_auth.model.entity.Company;
+import com.loja.auth.api_auth.model.entity.AuthCompany;
 
 public interface UserService {
 
@@ -13,5 +13,5 @@ public interface UserService {
     List<Auth> findAll();
     Auth save(Auth auth);
     void deleteById(Long id);
-    List<Company> getCompaniesByUserId(Long userId);
+    List<AuthCompany> getCompaniesByUserId(Long userId);
 }
