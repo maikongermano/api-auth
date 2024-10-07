@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.loja.auth.api_auth.model.entity.Auth;
+import com.loja.auth.api_auth.model.entity.Company;
 import com.loja.auth.api_auth.repository.AuthRepository;
 import com.loja.auth.api_auth.service.UserService;
 
@@ -39,5 +40,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(Long id) {
         authRepository.deleteById(id);
+    }
+    
+    @Override
+    public List<Company> getCompaniesByUserId(Long userId) {
+        Auth user = authRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + userId));
+        return List.of(user.getCompany());
     }
 }

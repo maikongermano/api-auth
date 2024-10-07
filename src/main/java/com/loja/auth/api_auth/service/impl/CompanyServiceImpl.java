@@ -5,7 +5,6 @@ import com.loja.auth.api_auth.repository.CompanyRepository;
 import com.loja.auth.api_auth.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 
 @Service
@@ -45,5 +44,6 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.findByName(name)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada com o nome: " + name));
     }
+
 
 }

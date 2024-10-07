@@ -8,8 +8,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.loja.auth.api_auth.model.enums.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -33,8 +37,9 @@ public class Auth implements UserDetails, Serializable {
 	@Column
 	private String password;
 	
+	@Enumerated(EnumType.STRING)
 	@Column
-	private String role;
+	private Role role;
 	
 	@ManyToOne
     @JoinColumn(name = "company_id")
@@ -42,7 +47,7 @@ public class Auth implements UserDetails, Serializable {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(role));
+	    return List.of(new SimpleGrantedAuthority(role.name()));
 	}
 
 	@Override
@@ -91,12 +96,12 @@ public class Auth implements UserDetails, Serializable {
 		this.login = login;
 	}
 
-	public String getRole() {
-		return role;
+	public Role getRole() {
+	    return role;
 	}
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setRole(Role role) {
+	    this.role = role;
 	}
 
 	public void setPassword(String password) {

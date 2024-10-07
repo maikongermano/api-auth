@@ -17,11 +17,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    
 
     @Override
     public Product createProduct(Product product) {
     	if (product.getImages() != null) {
             for (Image image : product.getImages()) {
+            	image.setCompany(product.getCompany());
                 image.setProduct(product);
             }
         }
@@ -46,6 +48,7 @@ public class ProductServiceImpl implements ProductService {
         existingProduct.setDescription(product.getDescription());
         existingProduct.setPrice(product.getPrice());
         existingProduct.setImages(product.getImages());
+        existingProduct.setCompany(product.getCompany());
         existingProduct.setAvaliable(product.getAvaliable());
         existingProduct.setIsAvaliable(product.getIsAvaliable());
         existingProduct.setMinQuantity(product.getMinQuantity());
@@ -65,5 +68,11 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> findProductsByName(String name) {
         return productRepository.findByNameContainingIgnoreCase(name);
     }
+    
+    @Override
+    public Page<Product> findProductsByCompanyId(Long companyId, int page, int size) {
+        return productRepository.findByCompanyId(companyId, PageRequest.of(page, size));
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.loja.auth.api_auth.mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.loja.auth.api_auth.model.dto.ImageDTO;
@@ -13,6 +14,9 @@ import com.loja.auth.api_auth.model.entity.Product;
 @Component
 public class ProductMapper {
 
+    @Autowired
+    private CompanyMapper companyMapper;
+
     public ProductDTO toDTO(Product product) {
         ProductDTO dto = new ProductDTO();
         dto.setId(product.getId());
@@ -20,7 +24,7 @@ public class ProductMapper {
         dto.setDescription(product.getDescription());
         dto.setSubDescription(product.getSubDescription());
         dto.setPrice(product.getPrice());
-        dto.setCompanyId(product.getCompanyId());
+        dto.setCompany(companyMapper.toDTO(product.getCompany()));
         dto.setAvaliable(product.getAvaliable());
         dto.setIsAvaliable(product.getIsAvaliable());
         dto.setMinQuantity(product.getMinQuantity());
@@ -44,7 +48,7 @@ public class ProductMapper {
         product.setDescription(productDTO.getDescription());
         product.setSubDescription(productDTO.getSubDescription());
         product.setPrice(productDTO.getPrice());
-        product.setCompanyId(productDTO.getCompanyId());
+        product.setCompany(companyMapper.toEntity(productDTO.getCompany()));
         product.setAvaliable(productDTO.getAvaliable());
         product.setIsAvaliable(productDTO.getIsAvaliable());
         product.setMinQuantity(productDTO.getMinQuantity());

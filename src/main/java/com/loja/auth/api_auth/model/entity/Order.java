@@ -16,6 +16,10 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 
     @Column(nullable = false)
     private String orderId;

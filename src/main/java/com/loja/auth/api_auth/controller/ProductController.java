@@ -78,5 +78,17 @@ public class ProductController {
             .collect(Collectors.toList());
         return ResponseEntity.ok(productDTOs);
     }
+    
+    @GetMapping("/by-company/{companyId}")
+    public ResponseEntity<Page<ProductDTO>> getProductsByCompanyId(
+            @PathVariable Long companyId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        
+        Page<Product> products = productService.findProductsByCompanyId(companyId, page, size);
+        Page<ProductDTO> productDTOs = products.map(productMapper::toDTO);
+        return ResponseEntity.ok(productDTOs);
+    }
+
 
 }

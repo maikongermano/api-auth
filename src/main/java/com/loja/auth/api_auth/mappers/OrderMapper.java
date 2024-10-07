@@ -3,6 +3,7 @@ package com.loja.auth.api_auth.mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.loja.auth.api_auth.model.dto.OrderDTO;
@@ -14,10 +15,17 @@ import com.loja.auth.api_auth.model.entity.OrderProduct;
 
 @Component
 public class OrderMapper {
+	
+	@Autowired
+    private CompanyMapper companyMapper;
+	
+	@Autowired
+	private ProductMapper productMapper;
 
     public OrderDTO toDTO(Order order) {
         OrderDTO dto = new OrderDTO();
         dto.setOrderId(order.getOrderId());
+        dto.setCompany(companyMapper.toDTO(order.getCompany()));
         dto.setClientId(order.getClientId());
         dto.setStatus(order.getStatus());
         dto.setCreatedAt(order.getCreatedAt());
@@ -42,6 +50,7 @@ public class OrderMapper {
     public Order toEntity(OrderDTO orderDTO) {
         Order order = new Order();
         order.setOrderId(orderDTO.getOrderId());
+        order.setCompany(companyMapper.toEntity(orderDTO.getCompany()));
         order.setClientId(orderDTO.getClientId());
         order.setStatus(orderDTO.getStatus());
         order.setCreatedAt(orderDTO.getCreatedAt());
@@ -65,7 +74,7 @@ public class OrderMapper {
 
     private OrderProductDTO toOrderProductDTO(OrderProduct product) {
         OrderProductDTO dto = new OrderProductDTO();
-        dto.setProductId(product.getProductId());
+        dto.setProduct(productMapper.toDTO(product.getProduct()));
         dto.setQuantity(product.getQuantity());
         dto.setPrice(product.getPrice());
         dto.setDiscount(product.getDiscount());
@@ -75,7 +84,7 @@ public class OrderMapper {
 
     private OrderProduct toOrderProductEntity(OrderProductDTO productDTO) {
         OrderProduct product = new OrderProduct();
-        product.setProductId(productDTO.getProductId());
+        product.setProduct(productMapper.toEntity(productDTO.getProduct()));
         product.setQuantity(productDTO.getQuantity());
         product.setPrice(productDTO.getPrice());
         product.setDiscount(productDTO.getDiscount());

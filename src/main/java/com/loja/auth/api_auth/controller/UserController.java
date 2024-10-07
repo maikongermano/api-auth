@@ -1,8 +1,10 @@
 package com.loja.auth.api_auth.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +21,7 @@ import com.loja.auth.api_auth.mappers.UserMapper;
 import com.loja.auth.api_auth.model.dto.UserDTO;
 import com.loja.auth.api_auth.model.entity.Auth;
 import com.loja.auth.api_auth.model.entity.Company;
+import com.loja.auth.api_auth.model.enums.Role;
 import com.loja.auth.api_auth.service.CompanyService;
 import com.loja.auth.api_auth.service.UserService;
 
@@ -54,8 +57,8 @@ public class UserController {
 
     @PostMapping
     public Auth createUser(@RequestBody UserDTO userDTO) {
-        Auth currentUser = (Auth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (!currentUser.getRole().equals("ADMIN")) {
+    	Auth currentUser = (Auth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (currentUser.getRole() != Role.ADMIN) {
             throw new RuntimeException("Apenas administradores podem criar novos usuários.");
         }
 
@@ -70,30 +73,30 @@ public class UserController {
 
     @PutMapping("/{id}")
     public Auth updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        Auth currentUser = (Auth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Auth user = userService.findByLogin(userDTO.getLogin());
+    	Auth currentUser = (Auth) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    Auth user = userService.findByLogin(userDTO.getLogin());
 
-        if (user.getRole().equals("ADMIN") && !currentUser.getRole().equals("ADMIN")) {
-            throw new RuntimeException("Somente administradores podem alterar a role de outro administrador.");
-        }
+	    if (user.getRole() == Role.ADMIN && currentUser.getRole() != Role.ADMIN) {
+	        throw new RuntimeException("Somente administradores podem alterar a role de outro administrador.");
+	    }
 
-        if (!currentUser.getRole().equals("ADMIN") && !currentUser.getId().equals(id)) {
-            throw new RuntimeException("Você não tem permissão para modificar este usuário.");
-        }
+	    if (currentUser.getRole() != Role.ADMIN && !currentUser.getId().equals(id)) {
+	        throw new RuntimeException("Você não tem permissão para modificar este usuário.");
+	    }
 
-        user.setLogin(userDTO.getLogin());
-        user.setPassword(userDTO.getPassword());
+	    user.setLogin(userDTO.getLogin());
+	    user.setPassword(userDTO.getPassword());
 
-        if (!user.getRole().equals("ADMIN") || (user.getRole().equals("ADMIN") && currentUser.getId().equals(id))) {
-            user.setRole(userDTO.getRole());
-        }
+	    if (user.getRole() != Role.ADMIN || (user.getRole() == Role.ADMIN && currentUser.getId().equals(id))) {
+	        user.setRole(userDTO.getRole());
+	    }
 
-        Company company = companyService.findById(userDTO.getCompanyId())
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada com o ID: " + userDTO.getCompanyId()));
+	    Company company = companyService.findById(userDTO.getCompanyId())
+	            .orElseThrow(() -> new RuntimeException("Empresa não encontrada com o ID: " + userDTO.getCompanyId()));
 
-        user.setCompany(company);
+	    user.setCompany(company);
 
-        return userService.save(user);
+	    return userService.save(user);
     }
     
     @PreAuthorize("hasRole('ADMIN')")
@@ -104,4 +107,11 @@ public class UserController {
         
         userService.deleteById(id);
     }
+    
+    @GetMapping("/{userId}/companies")
+    public ResponseEntity<List<Company>> getCompaniesByUserId(@PathVariable Long userId) {
+        List<Company> companies = userService.getCompaniesByUserId(userId);
+        return ResponseEntity.ok(companies);
+    }
+
 }

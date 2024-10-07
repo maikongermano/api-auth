@@ -31,7 +31,7 @@ public class TokenService {
                 .withIssuer(ISSUER)
                 .withSubject(user.getUsername())
                 .withClaim("id", user.getId())
-                .withClaim("role", user.getRole())
+                .withClaim("role", user.getRole().name())
                 .withClaim("empresa", user.getCompany().getId())
                 .withExpiresAt(LocalDateTime.now()
                         .plusMinutes(10)

@@ -12,7 +12,7 @@ public class ProductDTO {
     private String description;
     private String subDescription;
     private Double price;
-    private Long companyId;
+    private CompanyDTO company;
     private List<ImageDTO> images;
     private String avaliable;
     private Boolean isAvaliable;

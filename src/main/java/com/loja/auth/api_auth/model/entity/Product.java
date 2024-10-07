@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -27,14 +29,15 @@ public class Product {
     @Column(nullable = false)
     private String description;
     
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String subDescription;
 
     @Column(nullable = false)
     private Double price;
 
-    @Column(name = "company_id", nullable = false)
-    private Long companyId;
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;

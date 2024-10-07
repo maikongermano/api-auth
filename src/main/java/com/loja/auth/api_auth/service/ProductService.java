@@ -13,4 +13,5 @@ public interface ProductService {
     Product updateProduct(Long id, Product product);
     void deleteProduct(Long id);
     List<Product> findProductsByName(String name);
+    Page<Product> findProductsByCompanyId(Long companyId, int page, int size);
 }

@@ -1,5 +1,6 @@
 package com.loja.auth.api_auth.model.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,8 +19,15 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 
+    @Column(columnDefinition = "TEXT")
     private String url;
+    
+    @Column(columnDefinition = "TEXT")
     private String base64;
     
     @Lob

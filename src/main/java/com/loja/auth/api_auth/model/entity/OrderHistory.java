@@ -14,6 +14,14 @@ public class OrderHistory {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	
+	@ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+	
+	@ManyToOne
+    @JoinColumn(name = "company_id", nullable = false)
+    private Company company;
 
 	@Enumerated(EnumType.STRING)
     @Column(nullable = false)

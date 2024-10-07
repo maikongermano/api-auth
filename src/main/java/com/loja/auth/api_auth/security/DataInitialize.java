@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.loja.auth.api_auth.model.entity.Auth;
 import com.loja.auth.api_auth.model.entity.Company;
+import com.loja.auth.api_auth.model.enums.Role;
 import com.loja.auth.api_auth.repository.AuthRepository;
 import com.loja.auth.api_auth.repository.CompanyRepository;
 
@@ -58,7 +59,7 @@ public class DataInitialize implements CommandLineRunner {
             user = new Auth();
             user.setLogin("master");
             user.setPassword(passwordEncoder.encode("master"));
-            user.setRole("ADMIN");
+            user.setRole(Role.ADMIN);
             user.setCompany(company); // Associando a empresa ao usuário
 
             // Salvando o usuário no banco de dados

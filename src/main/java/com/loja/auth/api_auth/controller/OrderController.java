@@ -1,6 +1,8 @@
 package com.loja.auth.api_auth.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,5 +39,11 @@ public class OrderController {
     public ResponseEntity<Void> updateOrderStatus(@PathVariable Long orderId, @RequestBody OrderStatus newStatus) {
         orderService.updateOrderStatus(orderId, newStatus);
         return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("/by-company/{companyId}")
+    public ResponseEntity<Page<OrderDTO>> getOrdersByCompanyId(@PathVariable Long companyId, Pageable pageable) {
+        Page<OrderDTO> orders = orderService.findOrdersByCompanyId(companyId, pageable);
+        return ResponseEntity.ok(orders);
     }
 }

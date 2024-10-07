@@ -3,6 +3,8 @@ package com.loja.auth.api_auth.service.impl;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.loja.auth.api_auth.mappers.OrderMapper;
@@ -45,4 +47,10 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Ordem " + orderId + " não encontrada");
         }
     }
+    
+    @Override
+    public Page<OrderDTO> findOrdersByCompanyId(Long companyId, Pageable pageable) {
+        return orderRepository.findByCompanyId(companyId, pageable).map(orderMapper::toDTO);
+    }
+
 }
