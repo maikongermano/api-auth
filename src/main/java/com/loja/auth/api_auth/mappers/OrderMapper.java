@@ -26,7 +26,6 @@ public class OrderMapper {
         OrderDTO dto = new OrderDTO();
         dto.setOrderId(order.getOrderId());
         dto.setCompany(companyMapper.toDTO(order.getCompany()));
-        dto.setClientId(order.getClientId());
         dto.setStatus(order.getStatus());
         dto.setCreatedAt(order.getCreatedAt());
         dto.setUpdatedAt(order.getUpdatedAt());
@@ -51,7 +50,6 @@ public class OrderMapper {
         Order order = new Order();
         order.setOrderId(orderDTO.getOrderId());
         order.setCompany(companyMapper.toEntity(orderDTO.getCompany()));
-        order.setClientId(orderDTO.getClientId());
         order.setStatus(orderDTO.getStatus());
         order.setCreatedAt(orderDTO.getCreatedAt());
         order.setUpdatedAt(orderDTO.getUpdatedAt());

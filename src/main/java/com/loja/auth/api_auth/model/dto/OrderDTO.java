@@ -11,7 +11,6 @@ import lombok.Data;
 public class OrderDTO {
     private String orderId;
     private CompanyDTO company;
-    private String clientId;
     private List<OrderProductDTO> products;
     private OrderStatus status;
     private LocalDateTime createdAt;
