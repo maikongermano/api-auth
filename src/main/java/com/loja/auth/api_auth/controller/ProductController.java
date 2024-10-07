@@ -1,5 +1,8 @@
 package com.loja.auth.api_auth.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -66,4 +69,14 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
+    
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDTO>> searchProductsByName(@RequestParam String name) {
+        List<Product> products = productService.findProductsByName(name);
+        List<ProductDTO> productDTOs = products.stream()
+            .map(productMapper::toDTO)
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(productDTOs);
+    }
+
 }

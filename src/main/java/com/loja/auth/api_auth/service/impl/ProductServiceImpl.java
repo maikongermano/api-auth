@@ -1,10 +1,13 @@
 package com.loja.auth.api_auth.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.loja.auth.api_auth.model.entity.Image;
 import com.loja.auth.api_auth.model.entity.Product;
 import com.loja.auth.api_auth.repository.ProductRepository;
 import com.loja.auth.api_auth.service.ProductService;
@@ -17,6 +20,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(Product product) {
+    	if (product.getImages() != null) {
+            for (Image image : product.getImages()) {
+                image.setProduct(product);
+            }
+        }
         return productRepository.save(product);
     }
 
@@ -52,4 +60,10 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
+    
+    @Override
+    public List<Product> findProductsByName(String name) {
+        return productRepository.findByNameContainingIgnoreCase(name);
+    }
+
 }
