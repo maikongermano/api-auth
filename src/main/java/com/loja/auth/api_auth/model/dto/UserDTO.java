@@ -12,7 +12,7 @@ public class UserDTO {
 	private Long id;
     private String login;
     private Role role;
-    private List<String> empresas;
+    private List<AuthCompanyDTO> authCompany;
 	private Long companyId;
 	private String password;
 

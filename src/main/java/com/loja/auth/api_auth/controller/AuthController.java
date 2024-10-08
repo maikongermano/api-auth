@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loja.auth.api_auth.exception.CustomAuthenticationException;
+import com.loja.auth.api_auth.mappers.AuthCompanyMapper;
+import com.loja.auth.api_auth.model.dto.AuthCompanyDTO;
 import com.loja.auth.api_auth.model.dto.AuthDTO;
 import com.loja.auth.api_auth.model.dto.TokenDTO;
 import com.loja.auth.api_auth.model.dto.UserDTO;
@@ -43,6 +45,9 @@ public class AuthController {
     
     @Autowired
 	private HttpServletRequest request;
+    
+    @Autowired
+    private AuthCompanyMapper authCompanyMapper;
 
     // Endpoint para capturar as informações do usuário logado após o login bem-sucedido via OAuth2
     @GetMapping("/loginSuccess")
@@ -117,10 +122,11 @@ public class AuthController {
                 userDTO.setId(user.getId());
                 userDTO.setLogin(user.getUsername());
                 userDTO.setRole(user.getRole());
-                List<String> empresas = user.getAuthCompanies().stream()
-                        .map(authCompany ->  authCompany.getCompany().getId() + " - "+authCompany.getCompany().getName())
+                
+                List<AuthCompanyDTO> authCompanyDTOs = user.getAuthCompanies().stream()
+                        .map(authCompanyMapper::toDTO)
                         .collect(Collectors.toList());
-                userDTO.setEmpresas(empresas);;
+                userDTO.setAuthCompany(authCompanyDTOs);
                 
                 return ResponseEntity.ok(userDTO);
             } else {
